@@ -1,4 +1,4 @@
-package br.com.lucas.nota.resources;
+package br.com.lucas.nota.controller;
 
 import java.util.List;
 
@@ -11,40 +11,40 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.lucas.nota.modelo.TbProduto;
-import br.com.lucas.nota.repository.TbProdutoRepository;
+import br.com.lucas.nota.models.Produto;
+import br.com.lucas.nota.repository.ProdutoRepository;
 
 @RestController
 @RequestMapping(value = "/produto")
 
-public class Produtos {
+public class ProdutosController {
 	
 	 	final
-	    TbProdutoRepository  produtoRepository;
+	    ProdutoRepository  produtoRepository;
 
-	    public Produtos(TbProdutoRepository produtoRepository){ this.produtoRepository = produtoRepository;}
+	    public ProdutosController(ProdutoRepository produtoRepository){ this.produtoRepository = produtoRepository;}
 
 	    @GetMapping("/")
-	    public List<TbProduto> listaProdutos(){
+	    public List<Produto> listaProdutos(){
 	        return produtoRepository.findAll();
 	    }
 
-	    @GetMapping("/{idproduto}")
-	    public TbProduto listaProduto(@PathVariable(value = "idproduto") Integer idproduto){
-	        TbProduto produto =  produtoRepository.findById(idproduto);
+	    @GetMapping("/{id}")
+	    public Produto listarProduto(@PathVariable(value = "id") Integer id){
+	        Produto produto =  produtoRepository.findById(id).get();
 	        return produto; }
 
 	    @PostMapping("/")
-	    public TbProduto salvaProduto(@RequestBody TbProduto cadastroProduto){
-	        return produtoRepository.save(cadastroProduto); }
+	    public Produto salvarProduto(@RequestBody Produto produto){
+	        return produtoRepository.save(produto); }
 
 	    @PutMapping("/")
-	    public TbProduto alteraProduto(@RequestBody TbProduto produto) {
+	    public Produto alteraProduto(@RequestBody Produto produto) {
 	        return produtoRepository.save(produto);
 	    }
 
 	    @DeleteMapping("/")
-	    public void deletaProduto(@RequestBody TbProduto produto){
+	    public void deletaProduto(@RequestBody Produto produto){
 	        produtoRepository.delete(produto);
 	    }
 } 

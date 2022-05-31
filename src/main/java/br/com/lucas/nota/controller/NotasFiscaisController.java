@@ -1,4 +1,4 @@
-package br.com.lucas.nota.resources;
+package br.com.lucas.nota.controller;
 
 import java.util.List;
 
@@ -11,42 +11,42 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.lucas.nota.modelo.TbNotaFiscal;
-import br.com.lucas.nota.repository.TbNotaFiscalRepository;
+import br.com.lucas.nota.models.NotaFiscal;
+import br.com.lucas.nota.repository.NotaFiscalRepository;
 
 @RestController 
 @RequestMapping(value = "/notafiscal")
-public class NotasFiscais {
+public class NotasFiscaisController {
 	
-	final TbNotaFiscalRepository notaFiscalRepository;
+	final NotaFiscalRepository notaFiscalRepository;
 
-    public NotasFiscais(TbNotaFiscalRepository notaFiscalRepository) {
+    public NotasFiscaisController(NotaFiscalRepository notaFiscalRepository) {
         this.notaFiscalRepository = notaFiscalRepository;
     }
 
     @GetMapping("/")
-    public List<TbNotaFiscal> listaNotas() {
+    public List<NotaFiscal> listaNotas() {
         return notaFiscalRepository.findAll();
     }
 
-    @GetMapping("/{idnota_fiscal}")
-    public TbNotaFiscal listaNota(@PathVariable(value = "idnota_fiscal") Integer idnota_fiscal) {
-    	TbNotaFiscal notaFiscal = notaFiscalRepository.findById(idnota_fiscal); 
+    @GetMapping("/{id}")
+    public NotaFiscal listaNota(@PathVariable(value = "id") Integer id) {
+    	NotaFiscal notaFiscal = notaFiscalRepository.findById(id).get(); 
         return notaFiscal;
     }
 
     @PostMapping("/")
-    public TbNotaFiscal salvaNotaFiscal(@RequestBody TbNotaFiscal cadastronota) {
-        return notaFiscalRepository.save(cadastronota);
+    public NotaFiscal salvaNotaFiscal(@RequestBody NotaFiscal nota) {
+        return notaFiscalRepository.save(nota);
     }
 
     @PutMapping("/")
-    public TbNotaFiscal alteraNotaFiscal(@RequestBody TbNotaFiscal nota) {
+    public NotaFiscal alteraNotaFiscal(@RequestBody NotaFiscal nota) {
         return notaFiscalRepository.save(nota);
     }
 
     @DeleteMapping("/")
-    public void deletaNota(@RequestBody TbNotaFiscal nota) {
+    public void deletaNota(@RequestBody NotaFiscal nota) {
     	notaFiscalRepository.delete(nota);
     }
 

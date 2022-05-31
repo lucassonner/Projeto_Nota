@@ -1,4 +1,4 @@
-package br.com.lucas.nota.resources;
+package br.com.lucas.nota.controller;
 
 import java.util.List;
 
@@ -11,42 +11,42 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.lucas.nota.modelo.TbCliente;
-import br.com.lucas.nota.repository.TbClienteRepository;
+import br.com.lucas.nota.models.Cliente;
+import br.com.lucas.nota.repository.ClienteRepository;
 
 @RestController
 @RequestMapping(value = "/cliente")
-public class Clientes {
+public class ClientesController {
 	
-	 final
-	    TbClienteRepository clienteRepository;
+		final
+	    ClienteRepository clienteRepository;
 
-	    public Clientes(TbClienteRepository clienteRepository) {
+	    public ClientesController(ClienteRepository clienteRepository) {
 	        this.clienteRepository = clienteRepository;
 	    }
 
 	    @GetMapping("/")
-	    public List<TbCliente> listaClientes() {
+	    public List<Cliente> listaClientes() {
 	        return clienteRepository.findAll();
 	    }
 
-	    @GetMapping("/{idcliente}")
-	    public TbCliente listaClienteUnico(@PathVariable(value = "idcliente") Integer idcliente) {
-	        return clienteRepository.findById(idcliente);
+	    @GetMapping("/{id}")
+	    public Cliente listaCliente(@PathVariable(value = "id") Integer id) {
+	        return clienteRepository.findById(id).get();
 	    }
 
 	    @PostMapping("/")
-	    public TbCliente salvarCliente(@RequestBody TbCliente cliente) {
+	    public Cliente salvarCliente(@RequestBody Cliente cliente) {
 	        return clienteRepository.save(cliente);
 	    }
 
 	    @PutMapping("/")
-	    public TbCliente alteraCliente(@RequestBody TbCliente cliente) {
+	    public Cliente alteraCliente(@RequestBody Cliente cliente) {
 	        return clienteRepository.save(cliente);
 	    }
 
 	    @DeleteMapping("/")
-	    public void deletaCliente(@RequestBody TbCliente cliente) {
+	    public void deletaCliente(@RequestBody Cliente cliente) {
 	      clienteRepository.delete(cliente);
 	    }
 } 

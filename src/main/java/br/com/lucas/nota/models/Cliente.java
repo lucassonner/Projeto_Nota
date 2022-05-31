@@ -1,4 +1,4 @@
-package br.com.lucas.nota.modelo;
+package br.com.lucas.nota.models;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,37 +8,37 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "cliente")
-public class TbCliente {
+public class Cliente {
 
 	@Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-	private Integer idcliente;
-	private Integer codigo;
+	private Integer id;
+	private String codigo;
 	private String nome;
-
 	
-	public void setIdcliente(Integer idcliente) {
-		this.idcliente = idcliente;
+		
+	public Integer getId() {
+		return id;
 	}
 	
-	public Integer getIdcliente() {
-		return idcliente;
+	public void setId(Integer id) {
+		this.id = id;
 	}
 	
-	public void setCodigo(Integer codigo) {
+	public String getCodigo() {
+		return codigo;
+	}
+	
+	public void setCodigo(String codigo) {
 		this.codigo = codigo;
 	}
 	
-	public Integer getCodigo() {
-		return codigo;
+	public String getNome() {
+		return nome;
 	}
 	
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
 
-	public String getNome() {
-		return nome;
-	}
-	
 }
