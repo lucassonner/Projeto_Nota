@@ -2,6 +2,9 @@ package br.com.lucas.nota.controller;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+import javax.validation.Valid;
+
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,35 +21,40 @@ import br.com.lucas.nota.repository.ItemNotaFiscalRepository;
 @RequestMapping(value = "/itensnotafiscal")
 public class ItensNotasFiscaisController {
 	
-	final ItemNotaFiscalRepository itemNotaFiscalRepository;
-    public ItensNotasFiscaisController(ItemNotaFiscalRepository itemNotaFiscalRepository) {
-        this.itemNotaFiscalRepository = itemNotaFiscalRepository;
-    }
-
-    @GetMapping("/")
-    public List<ItensNotaFiscal> listaItensNotaFiscal() {
-        return itemNotaFiscalRepository.findAll();
-    }
-
-    @GetMapping("/{id}")
-    public ItensNotaFiscal listaItensNotaFiscal(@PathVariable(value = "id") Integer id){
-        return itemNotaFiscalRepository.findById(id).get();
-    }
-    
-    @PostMapping("/")
-    public ItensNotaFiscal salvaItemNotaFiscal(@RequestBody ItensNotaFiscal itensNota){
-        return itemNotaFiscalRepository.save(itensNota);
-    }
-
-    @PutMapping("/")
-    public ItensNotaFiscal alteraItensNotaFiscal(@RequestBody ItensNotaFiscal itensNota) {
-        return itemNotaFiscalRepository.save(itensNota);
-}
-
-    @DeleteMapping("/")
-    public void deletaItemNotaFiscal(@RequestBody ItensNotaFiscal itensNota) {
-    	itemNotaFiscalRepository.delete(itensNota);
-    }
+		final 
+		ItemNotaFiscalRepository itemNotaFiscalRepository;
+		
+	    public ItensNotasFiscaisController(ItemNotaFiscalRepository itemNotaFiscalRepository) {
+	        this.itemNotaFiscalRepository = itemNotaFiscalRepository;
+	    }
+	
+	    @GetMapping("/")
+	    public List<ItensNotaFiscal> listaItensNotaFiscal() {
+	        return itemNotaFiscalRepository.findAll();
+	    }
+	
+	    @GetMapping("/{id}")
+	    public ItensNotaFiscal listaItensNotaFiscal(@PathVariable Integer id){
+	        return itemNotaFiscalRepository.findById(id).get();
+	    }
+	    
+	    @PostMapping("/")
+	    @Transactional
+	    public ItensNotaFiscal salvaItemNotaFiscal(@RequestBody @Valid ItensNotaFiscal itensNota){
+	        return itemNotaFiscalRepository.save(itensNota);
+	    }
+	
+	    @PutMapping("/{id}")
+	    @Transactional
+	    public ItensNotaFiscal alteraItensNotaFiscal(@PathVariable Integer id, @RequestBody @Valid ItensNotaFiscal itensNota) {
+	    	ItensNotaFiscal atualizaItensNotaFiscal = itensNota.alteraItensNotaFiscal(id, itemNotaFiscalRepository);
+	    	return atualizaItensNotaFiscal;	    		
+	    }
+	
+	    @DeleteMapping("/{id}")
+	    @Transactional
+	    public void deletaItemNotaFiscal(@PathVariable Integer id) {
+	    	itemNotaFiscalRepository.deleteById(id);
+	    }
     
 } 
-

@@ -6,9 +6,13 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import br.com.lucas.nota.repository.ItemNotaFiscalRepository;
 
 @Entity
 @Table(name = "itens_nf")
@@ -19,17 +23,22 @@ public class ItensNotaFiscal {
 	private Integer id;
 	
 	@ManyToOne
-    @JoinColumn(name="notaFiscal")
+	@NotNull @JsonIgnore
 	private NotaFiscal notaFiscal;	
 	
+	@NotNull
 	private Integer sequencial;
 	
 	@ManyToOne
-	@JoinColumn(name = "produto")
 	private Produto produto;
 	
+	@NotNull
 	private BigDecimal quantidade;
+	
+	@NotNull
 	private BigDecimal valorUnit;
+	
+	@NotNull
 	private BigDecimal valorTotal;
 	
 	
@@ -88,7 +97,18 @@ public class ItensNotaFiscal {
 	public void setValorTotal(BigDecimal valorTotal) {
 		this.valorTotal = valorTotal;
 	}
-	
 
+	public ItensNotaFiscal alteraItensNotaFiscal(Integer id, ItemNotaFiscalRepository itemNotaFiscalRepository) {
+		ItensNotaFiscal itensNota = itemNotaFiscalRepository.findById(id).get();
+		
+		itensNota.setNotaFiscal(this.notaFiscal);
+		itensNota.setSequencial(this.sequencial);
+		itensNota.setProduto(this.produto);
+		itensNota.setQuantidade(this.quantidade);
+		itensNota.setValorUnit(this.valorUnit);
+		itensNota.setValorTotal(this.valorTotal);
+
+		return itensNota;
+	}
 
 }

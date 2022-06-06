@@ -2,6 +2,9 @@ package br.com.lucas.nota.controller;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+import javax.validation.Valid;
+
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,28 +29,31 @@ public class ClientesController {
 	    }
 
 	    @GetMapping("/")
-	    public List<Cliente> listaClientes() {
+	    public List<Cliente> listaTodosClientes() {
 	        return clienteRepository.findAll();
 	    }
 
 	    @GetMapping("/{id}")
-	    public Cliente listaCliente(@PathVariable(value = "id") Integer id) {
+	    public Cliente listaCliente(@PathVariable Integer id) {
 	        return clienteRepository.findById(id).get();
 	    }
 
 	    @PostMapping("/")
-	    public Cliente salvarCliente(@RequestBody Cliente cliente) {
+	    @Transactional
+	    public Cliente salvarCliente(@RequestBody @Valid Cliente cliente) {
 	        return clienteRepository.save(cliente);
 	    }
 
-	    @PutMapping("/")
-	    public Cliente alteraCliente(@RequestBody Cliente cliente) {
-	        return clienteRepository.save(cliente);
+	    @PutMapping("/{id}")
+	    @Transactional
+	    public Cliente alteraCliente(@PathVariable Integer id, @RequestBody @Valid Cliente cliente) {
+	    	Cliente atualizaCliente = cliente.alteraCliente(id, clienteRepository);
+	    	return atualizaCliente;
 	    }
 
-	    @DeleteMapping("/")
-	    public void deletaCliente(@RequestBody Cliente cliente) {
-	      clienteRepository.delete(cliente);
+	    @DeleteMapping("/{id}")
+	    @Transactional
+	    public void deletaCliente(@PathVariable Integer id) {
+	      clienteRepository.deleteById(id);
 	    }
-} 
-
+}

@@ -2,6 +2,9 @@ package br.com.lucas.nota.controller;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+import javax.validation.Valid;
+
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,30 +25,37 @@ public class ProdutosController {
 	 	final
 	    ProdutoRepository  produtoRepository;
 
-	    public ProdutosController(ProdutoRepository produtoRepository){ this.produtoRepository = produtoRepository;}
+	    public ProdutosController(ProdutoRepository produtoRepository) { 
+	    	this.produtoRepository = produtoRepository;
+	    }
 
 	    @GetMapping("/")
-	    public List<Produto> listaProdutos(){
+	    public List<Produto> listaTodosProdutos() {
 	        return produtoRepository.findAll();
 	    }
 
 	    @GetMapping("/{id}")
-	    public Produto listarProduto(@PathVariable(value = "id") Integer id){
-	        Produto produto =  produtoRepository.findById(id).get();
-	        return produto; }
-
-	    @PostMapping("/")
-	    public Produto salvarProduto(@RequestBody Produto produto){
-	        return produtoRepository.save(produto); }
-
-	    @PutMapping("/")
-	    public Produto alteraProduto(@RequestBody Produto produto) {
-	        return produtoRepository.save(produto);
+	    public Produto listarProduto(@PathVariable Integer id) {
+	        return produtoRepository.findById(id).get();
 	    }
 
-	    @DeleteMapping("/")
-	    public void deletaProduto(@RequestBody Produto produto){
-	        produtoRepository.delete(produto);
+	    @PostMapping("/")
+	    @Transactional
+	    public Produto salvarProduto(@RequestBody @Valid Produto produto){
+	        return produtoRepository.save(produto); 
+	    }
+
+	    @PutMapping("/{id}")
+	    @Transactional
+	    public Produto alteraProduto(@PathVariable Integer id, @RequestBody @Valid Produto produto) {
+	    	Produto atualizaProduto = produto.alteraProduto(id, produtoRepository);
+	    	return atualizaProduto;
+	    }
+
+	    @DeleteMapping("/{id}")
+	    @Transactional
+	    public void deletaProduto(@PathVariable Integer id){
+	        produtoRepository.deleteById(id);
 	    }
 } 
 
